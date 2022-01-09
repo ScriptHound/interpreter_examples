@@ -5,8 +5,6 @@ LPAREN, RPAREN, EOF = 'LPAREN', 'RPAREN', 'EOF'
 class Token:
     def __init__(self, value, type) -> None:
         self.value = value
-        # if value.isnumeric():
-        #     self.value = int(self.value)
         self.type = type
 
     def __str__(self) -> str:
