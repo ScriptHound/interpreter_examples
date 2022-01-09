@@ -1,4 +1,5 @@
-INTEGER, MUL, DIV, PLUS, MINUS, EOF = 'INTEGER', 'MUL', 'DIV', 'PLUS', 'MINUS', 'EOF'
+INTEGER, MUL, DIV, PLUS, MINUS = 'INTEGER', 'MUL', 'DIV', 'PLUS', 'MINUS'
+LPAREN, RPAREN, EOF = 'LPAREN', 'RPAREN', 'EOF'
 
 
 class Token:
@@ -43,6 +44,12 @@ class Lexer:
         if self.curchar == '/':
             return Token(self.curchar, DIV)
 
+        if self.curchar == '(':
+            return Token(self.curchar, LPAREN)
+
+        if self.curchar == ')':
+            return Token(self.curchar, RPAREN)
+
 
 class Interpreter:
     def __init__(self, lexer) -> None:
@@ -53,7 +60,11 @@ class Interpreter:
         processed_value = self.lexer.get_next_token()
         self.curtoken = processed_value
         print(self.curtoken)
-        return processed_value.value
+        if self.curtoken.type == INTEGER:
+            return self.curtoken.value
+
+        if self.curtoken.type == LPAREN:
+            return self.expr()
 
     def term(self):
         result = self.factor()
@@ -63,7 +74,7 @@ class Interpreter:
             if self.curtoken.type == MUL:
                 result *= self.factor()
             if self.curtoken.type == DIV:
-                result //= self.factor()
+                result /= self.factor()
             self.factor()
         return result
 
