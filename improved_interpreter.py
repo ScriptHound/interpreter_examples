@@ -5,8 +5,8 @@ LPAREN, RPAREN, EOF = 'LPAREN', 'RPAREN', 'EOF'
 class Token:
     def __init__(self, value, type) -> None:
         self.value = value
-        if value.isnumeric():
-            self.value = int(self.value)
+        # if value.isnumeric():
+        #     self.value = int(self.value)
         self.type = type
 
     def __str__(self) -> str:
@@ -24,13 +24,23 @@ class Lexer:
             self.curchar = self.code[self.curpos]
         self.curpos += 1
 
+    def integer(self):
+        number = self.curchar
+        if self.curpos < len(self.code):
+            while self.code[self.curpos].isnumeric():
+                self.advance()
+                number += self.curchar
+
+        return int(number)
+
     def get_next_token(self):
         self.advance()
         if self.curpos > len(self.code):
             return Token('EOF', EOF)
 
         if self.curchar.isnumeric():
-            return Token(self.curchar, INTEGER)
+            number = self.integer()
+            return Token(number, INTEGER)
 
         if self.curchar == '+':
             return Token(self.curchar, PLUS)
@@ -57,14 +67,18 @@ class Interpreter:
         self.curtoken = None
 
     def factor(self):
-        processed_value = self.lexer.get_next_token()
-        self.curtoken = processed_value
+        self.integer()
+
         print(self.curtoken)
         if self.curtoken.type == INTEGER:
             return self.curtoken.value
 
         if self.curtoken.type == LPAREN:
             return self.expr()
+
+    def integer(self):
+        processed_value = self.lexer.get_next_token()
+        self.curtoken = processed_value
 
     def term(self):
         result = self.factor()
