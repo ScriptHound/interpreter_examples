@@ -1,0 +1,8 @@
+(* for improved interpreter *)
+expr = term ((SUM | SUB), term)*
+term = factor ((MUL | DIV), factor)*
+factor = INTEGER | LPAREN expr RPAREN
+
+(* for the simplest interpreter *)
+expr = factor ((SUM | SUB), factor)*
+factor = INTEGER
