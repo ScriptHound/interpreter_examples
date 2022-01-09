@@ -11,3 +11,5 @@ Usage:
 calc> 22 + 2 + 2
 26
 ```
+
+The same applies to improved interpreter
