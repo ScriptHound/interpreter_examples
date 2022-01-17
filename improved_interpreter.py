@@ -28,6 +28,8 @@ class Lexer:
             while self.code[self.curpos].isnumeric():
                 self.advance()
                 number += self.curchar
+                if self.curpos >= len(self.code):
+                    break
 
         return int(number)
 
@@ -81,7 +83,9 @@ class Interpreter:
     def term(self):
         result = self.factor()
 
+        # update self.curtoken so curtoken will be mul either div
         self.factor()
+
         while self.curtoken.type in (MUL, DIV):
             if self.curtoken.type == MUL:
                 result *= self.factor()
