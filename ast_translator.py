@@ -23,13 +23,25 @@ class Lexer:
         self.curchar = self.code[self.curpos]
         self.curpos += 1
 
+    def integer(self):
+        number = self.curchar
+        if self.curpos < len(self.code):
+            while self.code[self.curpos].isnumeric():
+                self.advance()
+                number += self.curchar
+                if self.curpos >= len(self.code):
+                    break
+
+        return int(number)
+
     def get_next_token(self):
         self.advance()
         if self.curpos > len(self.code):
             return Token('EOF', EOF)
 
         if self.curchar.isnumeric():
-            return Token(int(self.curchar), INTEGER)
+            number = self.integer()
+            return Token(number, INTEGER)
 
         elif self.curchar == '+':
             return Token('+', PLUS)
